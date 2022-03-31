@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="search">
     <label class="block uppercase text-sm text-gray-600 pl-0.5" for="search"
       >Suche</label
     >
@@ -15,13 +15,10 @@
         focus:outline-none focus:ring-1 focus:ring-thunderbird-red
       "
     />
-    <button
-      class="bg-black text-white font-bold px-4 py-2 ml-4"
-      @click="search"
-    >
+    <button class="bg-black text-white font-bold px-4 py-2 ml-4" type="submit">
       Suchen
     </button>
-  </div>
+  </form>
 </template>
 
 <script>

@@ -6,12 +6,8 @@
         # {{ clip["Clip Nr."] }}
       </div>
       <div class="p-4">
-        <img
-          :src="clip['Vorschaubild'][0].thumbnails.large.url"
-          alt=""
-          class="w-96"
-        />
-        <div class="uppercase text-sm text-gray-600 mt-4">Link</div>
+        <img v-if="image" :src="image" alt="" class="w-96 mb-4" />
+        <div class="uppercase text-sm text-gray-600">Link</div>
         <div>
           <a
             :href="clip['Vimeo-Link']"
@@ -53,16 +49,18 @@
 
 <script>
 export default {
-  data() {
-    return {
-      clip: null,
-    };
-  },
   async fetch() {
-    const response = await this.$axios.get(
-      `/api/clips/${this.$route.params.id}`
-    );
-    this.clip = response.data;
+    await this.$store.dispatch("fetchClip", this.$route.params.id);
+  },
+  computed: {
+    clip() {
+      return this.$store.getters.clipById(this.$route.params.id);
+    },
+    image() {
+      return this.clip && this.clip["Vorschaubild"]
+        ? this.clip["Vorschaubild"][0].thumbnails.large.url
+        : null;
+    },
   },
 };
 </script>

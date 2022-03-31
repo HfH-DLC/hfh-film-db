@@ -16,12 +16,16 @@
 export default {
   data() {
     return {
-      clips: [],
       searchText: "",
     };
   },
   async fetch() {
     return this.fetchClips();
+  },
+  computed: {
+    clips() {
+      return this.$store.state.clips;
+    },
   },
   methods: {
     async searchClips({ text }) {
@@ -29,8 +33,7 @@ export default {
       await this.fetchClips({ text });
     },
     async fetchClips(params) {
-      const response = await this.$axios.get("/api/clips", { params });
-      this.clips = response.data.records;
+      await this.$store.dispatch("fetchClips", params);
     },
   },
 };
