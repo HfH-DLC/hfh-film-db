@@ -1,23 +1,67 @@
 <template>
-  <form @submit.prevent="search">
-    <label class="block uppercase text-sm text-gray-600 pl-0.5" for="search"
+  <form @submit.prevent="search" class="relative">
+    <label
+      class="
+        block
+        mb-0.5
+        text-xs
+        font-bold
+        uppercase
+        text-thunderbird-red
+        px-1.5
+        leading-6
+        absolute
+        -top-3
+        left-2
+        bg-white
+      "
+      for="search"
       >Suche</label
     >
-    <input
-      v-model="searchtext"
-      id="search"
-      type="search"
-      class="
-        mt-1
-        border border-gray-300
-        rounded
-        p-2
-        focus:outline-none focus:ring-1 focus:ring-thunderbird-red
-      "
-    />
-    <button class="bg-black text-white font-bold px-4 py-2 ml-4" type="submit">
-      Suchen
-    </button>
+    <div class="flex items-center justify-start gap-4">
+      <input
+        v-model="searchtext"
+        id="search"
+        type="search"
+        class="
+          block
+          w-48
+          border-2 border-thunderbird-red
+          placeholder-thunderbird-red
+          text-lg
+          leading-6
+          py-3.5
+          px-5
+          flex-1
+          md:flex-none
+        "
+        placeholder="Suchbegriff"
+      />
+      <button
+        class="
+          bg-black
+          text-white
+          font-bold
+          py-4
+          pl-6
+          pr-14
+          bg-search bg-no-repeat
+          bg-[length:22px_22px]
+          bg-[position:calc(100%-16px)_50%]
+          text-left
+          leading-6
+          appearance-none
+          cursor-pointer
+          focus:bg-thunderbird-red
+          hover:bg-thunderbird-red
+          focus:bg-search-active
+          hover:bg-search-active
+        "
+        type="submit"
+      >
+        Suchen
+      </button>
+    </div>
   </form>
 </template>
 
