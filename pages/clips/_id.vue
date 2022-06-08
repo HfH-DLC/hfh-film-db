@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <h1 class="text-2xl block p-4 text-thunderbird-red">Filmclips</h1>
-    <div v-if="clip">
-      <div class="font-bold bg-thunderbird-red text-white p-4">
-        # {{ clip["Clip Nr."] }}
+  <div class="flex flex-col">
+    <div v-if="loading" class="flex justify-center items-center flex-1">
+      <LoadingIndicator />
+    </div>
+    <div v-else-if="clip">
+      <div class="font-bold bg-thunderbird-red text-white py-4 px-8">
+        Clip {{ clip["Clip Nr."] }}
       </div>
-      <div class="p-4">
-        <img v-if="image" :src="image" alt="" class="w-96 mb-4" />
-        <div class="uppercase text-sm text-gray-600">Link</div>
+      <div class="p-8">
+        <img v-if="image" :src="image" alt="" class="w-96 mb-12" />
+        <div class="uppercase text-xs font-bold text-thunderbird-red">Link</div>
         <div>
           <a
             :href="clip['Vimeo-Link']"
@@ -18,29 +20,49 @@
             >{{ clip["Vimeo-Link"] }}</a
           >
         </div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Behinderung</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Behinderung
+        </div>
         <div>{{ clip.Behinderung }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Thema</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Thema
+        </div>
         <div>{{ clip.Thema }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
           Heilpädagogische Relevanz
         </div>
         <div>{{ clip["Heilpädagogische Relevanz"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Clip-Inhalt</div>
-        <div>{{ clip.Clipinhalt }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Länge</div>
-        <div>{{ clip.Cliplänge }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Film</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Clip-Inhalt
+        </div>
+        <div>{{ clip["Inhalt"] }}</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Länge
+        </div>
+        <div>{{ clip["Länge"] }}</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Film
+        </div>
         <div>{{ clip["Film_Titel"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Inhalt</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Inhalt
+        </div>
         <div>{{ clip["Film_Inhalt"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Jahr</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Jahr
+        </div>
         <div>{{ clip["Film_Jahr"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Land</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Land
+        </div>
         <div>{{ clip["Film_Land"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Ton</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Ton
+        </div>
         <div>{{ clip["Film_Ton"] }}</div>
-        <div class="uppercase text-sm text-gray-600 mt-4">Weitere Angaben</div>
+        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
+          Weitere Angaben
+        </div>
         <div>{{ clip["Film_Weitere_Angaben"] }}</div>
       </div>
     </div>
@@ -60,6 +82,9 @@ export default {
       return this.clip && this.clip["Vorschaubild"]
         ? this.clip["Vorschaubild"][0].thumbnails.large.url
         : null;
+    },
+    loading() {
+      return this.$store.state.loading;
     },
   },
 };
