@@ -1,39 +1,34 @@
 <template>
   <div
     class="
-      bg-white
-      rounded
-      shadow
-      border border-gray-300
+      border-2 border-fantasy-plain
       overflow-hidden
-      hover:border-thunderbird-red
-      transform
-      hover:scale-101 hover:shadow-lg
+      hover:bg-thunderbird-red hover:text-white hover:border-thunderbird-red
+      group-focus-visible:bg-thunderbird-red
+      group-focus-visible:text-white
+      group-focus-visible:border-thunderbird-red
+      group
     "
   >
-    <div class="font-bold bg-thunderbird-red text-white p-2">
-      # {{ clip["Clip Nr."] }}
+    <div class="bg-fantasy-plain">
+      <div
+        class="aspect-video bg-cover"
+        :style="{
+          backgroundImage: clip['Vorschaubild']
+            ? 'url(' + clip['Vorschaubild'][0].thumbnails.large.url + ')'
+            : '',
+        }"
+      ></div>
     </div>
-    <div class="p-4" v-if="clip['Vorschaubild']">
-      <img
-        :src="clip['Vorschaubild'][0].thumbnails.large.url"
-        alt=""
-        class="w-full"
-      />
+    <div class="group-hover:text-white pt-4 px-4 text-lg">
+      Clip {{ clip["Clip Nr."] }}
     </div>
-    <div class="p-4">
-      <div class="uppercase text-sm text-gray-600">Behinderung</div>
-      <div v-html="behinderung" />
-      <div class="uppercase text-sm text-gray-600 mt-4">Thema</div>
-      <div v-html="thema" />
-      <div class="uppercase text-sm text-gray-600 mt-4">
-        Heilpädagogische Relevanz
-      </div>
-      <div v-html="relevanz" />
-      <div class="uppercase text-sm text-gray-600 mt-4">Film</div>
-      <div v-html="filmtitel" />
-      <div class="uppercase text-sm text-gray-600 mt-4">Keywords</div>
-      <div v-html="keywords" />
+    <div class="p-4 gap-4 grid">
+      <CardSection label="Behinderung" :content="behinderung" />
+      <CardSection label="Thema" :content="thema" />
+      <CardSection label="Heilpädagogische Relevanz" :content="relevanz" />
+      <CardSection label="Film" :content="filmtitel" />
+      <CardSection label="Keywords" :content="keywords" />
     </div>
   </div>
 </template>
