@@ -23,7 +23,7 @@ module.exports = {
             backgroundImage: {
                 'dropdown-arrow': "url('@/assets/images/dropdown-arrow.png')",
                 'search': "url('@/assets/images/search.svg')",
-                'search-active': "url('@/assets/images/search-active.svg')"
+                'search-active': "url('@/assets/images/search-active.svg')",
             },
             backgroundSize: {
                 'size-search': "22px 22px",

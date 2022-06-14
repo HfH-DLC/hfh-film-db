@@ -45,15 +45,13 @@
           py-4
           pl-6
           pr-14
-          bg-search bg-no-repeat bg-size-search bg-pos-search
           text-left
           leading-6
           appearance-none
           cursor-pointer
           focus:bg-thunderbird-red
           hover:bg-thunderbird-red
-          focus:bg-search-active
-          hover:bg-search-active
+          search-icon
         "
         type="submit"
       >
@@ -78,5 +76,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.search-icon {
+  @apply bg-search bg-no-repeat bg-size-search bg-pos-search;
+}
+.search-icon:hover,
+.search-icon:focus {
+  @apply bg-search-active;
+}
 </style>
