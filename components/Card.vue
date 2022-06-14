@@ -14,9 +14,7 @@
       <div
         class="aspect-video bg-cover"
         :style="{
-          backgroundImage: clip['Vorschaubild']
-            ? 'url(' + clip['Vorschaubild'][0].thumbnails.large.url + ')'
-            : '',
+          backgroundImage: backgroundImage(clip),
         }"
       ></div>
     </div>
@@ -77,6 +75,18 @@ export default {
         });
       }
       return content;
+    },
+    backgroundImage(clip) {
+      if (
+        clip["Vorschaubild"] &&
+        clip["Vorschaubild"][0] &&
+        clip["Vorschaubild"][0].thumbnails &&
+        clip["Vorschaubild"][0].thumbnails.large &&
+        clip["Vorschaubild"][0].thumbnails.large.url
+      ) {
+        return "url(" + clip["Vorschaubild"][0].thumbnails.large.url + ")";
+      }
+      return "";
     },
   },
 };
