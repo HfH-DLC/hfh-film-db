@@ -21,6 +21,7 @@
     <div class="flex items-center justify-start gap-4">
       <input
         v-model="searchtext"
+        @search="search"
         id="search"
         type="search"
         class="
