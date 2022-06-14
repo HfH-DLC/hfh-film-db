@@ -51,4 +51,16 @@ export default {
     serverMiddleware: [
         { path: "/api", handler: "~/server-middleware/rest.js" },
     ],
+
+    publicRuntimeConfig: {
+        axios: {
+            browserBaseURL: process.env.BROWSER_BASE_URL
+        }
+    },
+
+    privateRuntimeConfig: {
+        axios: {
+            baseURL: process.env.BASE_URL
+        }
+    },
 }
