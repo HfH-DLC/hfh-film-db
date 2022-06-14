@@ -4,13 +4,13 @@
       <LoadingIndicator />
     </div>
     <div v-else-if="clip">
-      <div class="font-bold bg-thunderbird-red text-white py-4 px-8">
+      <h2 class="font-bold bg-thunderbird-red text-white py-4 px-8">
         Clip {{ clip["Clip Nr."] }}
-      </div>
+      </h2>
       <div class="p-8">
-        <img v-if="image" :src="image" alt="" class="w-96 mb-12" />
-        <div class="uppercase text-xs font-bold text-thunderbird-red">Link</div>
-        <div>
+        <img v-if="image" :src="image" alt="" class="w-96 mb-8" />
+        <h2 class="text-lg text-thunderbird-red">Informationen zum Clip</h2>
+        <DetailSection label="Link">
           <a
             :href="clip['Vimeo-Link']"
             class="text-thunderbird-red hover:underline"
@@ -19,51 +19,58 @@
             noopener
             >{{ clip["Vimeo-Link"] }}</a
           >
-        </div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Behinderung
-        </div>
-        <div>{{ clip.Behinderung }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Thema
-        </div>
-        <div>{{ clip.Thema }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Heilpädagogische Relevanz
-        </div>
-        <div>{{ clip["Heilpädagogische Relevanz"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Clip-Inhalt
-        </div>
-        <div>{{ clip["Inhalt"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Länge
-        </div>
-        <div>{{ secondsToString(clip["Länge"]) }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Film
-        </div>
-        <div>{{ clip["Film_Titel"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Inhalt
-        </div>
-        <div>{{ clip["Film_Inhalt"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Jahr
-        </div>
-        <div>{{ clip["Film_Jahr"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Land
-        </div>
-        <div>{{ clip["Film_Land"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Ton
-        </div>
-        <div>{{ clip["Film_Ton"] }}</div>
-        <div class="uppercase text-xs font-bold text-thunderbird-red mt-4">
-          Weitere Angaben
-        </div>
-        <div>{{ clip["Film_Weitere_Angaben"] }}</div>
+        </DetailSection>
+        <DetailSection label="Behinderung">
+          {{ clip.Behinderung }}
+        </DetailSection>
+        <DetailSection label="Thema">
+          {{ clip.Thema }}
+        </DetailSection>
+        <DetailSection label="Heilpädagogische Relevanz">
+          {{ clip["Heilpädagogische Relevanz"] }}
+        </DetailSection>
+        <DetailSection label="Inhalt">
+          {{ clip.Inhalt }}
+        </DetailSection>
+        <DetailSection label="Länge">
+          {{ clipLength }}
+        </DetailSection>
+        <DetailSection label="Schlüsselwörter">
+          {{ keywords }}
+        </DetailSection>
+        <hr class="mt-6 mb-4 border-thunderbird-red" />
+        <h2 class="text-lg text-thunderbird-red">
+          Informationen zu den Personen mit Behinderung
+        </h2>
+        <DetailSection label="Herkunft">
+          {{ origin }}
+        </DetailSection>
+        <DetailSection label="Altersgruppen">
+          {{ age }}
+        </DetailSection>
+        <DetailSection label="Geschlecht">
+          {{ gender }}
+        </DetailSection>
+        <hr class="mt-6 mb-4 border-thunderbird-red" />
+        <h2 class="text-lg text-thunderbird-red">Informationen zum Film</h2>
+        <DetailSection label="Titel">
+          {{ clip["Film_Titel"] }}
+        </DetailSection>
+        <DetailSection label="Inhalt">
+          {{ clip["Film_Inhalt"] }}
+        </DetailSection>
+        <DetailSection label="Jahr">
+          {{ clip["Film_Jahr"] }}
+        </DetailSection>
+        <DetailSection label="Land">
+          {{ clip["Film_Land"] }}
+        </DetailSection>
+        <DetailSection label="Ton">
+          {{ clip["Film_Ton"] }}
+        </DetailSection>
+        <DetailSection label="Weitere Angaben">
+          {{ clip["Film_Weitere_Angaben"] }}
+        </DetailSection>
       </div>
     </div>
   </div>
@@ -82,6 +89,29 @@ export default {
       return this.clip && this.clip["Vorschaubild"]
         ? this.clip["Vorschaubild"][0].thumbnails.large.url
         : null;
+    },
+    clipLength() {
+      return this.clip && this.clip["Länge"]
+        ? this.secondsToString(this.clip["Länge"])
+        : "";
+    },
+    keywords() {
+      return this.clip["keywords"] ? this.clip["keywords"].join(", ") : "";
+    },
+    origin() {
+      return this.clip["Herkunft behinderte Person"]
+        ? this.clip["Herkunft behinderte Person"].join(", ")
+        : "";
+    },
+    age() {
+      return this.clip["Altersgruppe behinderte Person"]
+        ? this.clip["Altersgruppe behinderte Person"].join(", ")
+        : "";
+    },
+    gender() {
+      return this.clip["Geschlecht behinderte Person"]
+        ? this.clip["Geschlecht behinderte Person"].join(", ")
+        : "";
     },
     loading() {
       return this.$store.state.loading;
