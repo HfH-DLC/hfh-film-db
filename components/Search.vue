@@ -45,9 +45,7 @@
           py-4
           pl-6
           pr-14
-          bg-search bg-no-repeat
-          bg-[length:22px_22px]
-          bg-[position:calc(100%-16px)_50%]
+          bg-search bg-no-repeat bg-size-search bg-pos-search
           text-left
           leading-6
           appearance-none

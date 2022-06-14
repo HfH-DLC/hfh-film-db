@@ -30,8 +30,7 @@
         border-2 border-thunderbird-red
         appearance-none
         text-lg
-        bg-white bg-dropdown-arrow bg-no-repeat bg-right
-        bg-[length:32px_9px]
+        bg-white bg-dropdown-arrow bg-no-repeat bg-right bg-size-arrow
         h-14
       "
       @change="onChange"
