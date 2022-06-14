@@ -26,7 +26,7 @@
       <CardSection label="Thema" :content="thema" />
       <CardSection label="Heilpädagogische Relevanz" :content="relevanz" />
       <CardSection label="Film" :content="filmtitel" />
-      <CardSection label="Keywords" :content="keywords" />
+      <CardSection label="Schlüsselwörter" :content="keywords" />
     </div>
   </div>
 </template>
