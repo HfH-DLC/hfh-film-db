@@ -14,6 +14,31 @@ const searchTextFields = [
     'keywords',
     'Film_Titel'
 ]
+let allowedFields = [
+    'Behinderung',
+    'Thema',
+    'Heilpädagogische Relevanz',
+    'Herkunft behinderte Person',
+    'Film',
+    'Geschlecht behinderte Person',
+    'Vorschaubild',
+    'Länge',
+    'Altersgruppe behinderte Person',
+    'Clip Nr.',
+    'keywords',
+    'Inhalt',
+    'Film_Titel',
+    'Film_Jahr',
+    'Film_Land',
+    'Film_Inhalt',
+    'Film_Weitere_Angaben',
+    'Film_Ton'
+]
+
+if (process.env.ENABLE_VIDEO === 'TRUE') {
+    allowedFields.push('Vimeo-Link');
+}
+console.log(process.env.ENABLE_VIDEO);
 
 
 app.use(bodyParser.json())
@@ -83,7 +108,10 @@ const getSingleRecord = async(table, id) => {
 
 const transformRecord = (record) => {
     for (const [key, value] of Object.entries(record.fields)) {
-        if (isLookupField(key)) {
+        if (!allowedFields.includes(key)) {
+            delete record.fields[key];
+            continue;
+        } else if (isLookupField(key)) {
             record.fields[key] = value.join(", ")
         }
     }
