@@ -8,18 +8,16 @@
         Clip {{ clip["Clip Nr."] }}
       </h2>
       <div class="p-8">
-        <img v-if="image" :src="image" alt="" class="w-96 mb-8" />
+        <iframe
+          class="w-[640px] mb-8 aspect-video bg-black"
+          v-if="clip['Vimeo-Link']"
+          title="vimeo-player"
+          :src="`https://player.vimeo.com/video/${videoUrlFragment1}?h=${videoUrlFragment2}`"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+        <img v-else-if="image" :src="image" alt="" class="w-96 mb-8" />
         <h2 class="text-lg text-thunderbird-red">Informationen zum Clip</h2>
-        <DetailSection label="Link">
-          <a
-            :href="clip['Vimeo-Link']"
-            class="text-thunderbird-red hover:underline"
-            target="_blank"
-            noreferrer
-            noopener
-            >{{ clip["Vimeo-Link"] }}</a
-          >
-        </DetailSection>
         <DetailSection label="Behinderung">
           {{ clip.Behinderung }}
         </DetailSection>
@@ -84,6 +82,12 @@ export default {
   computed: {
     clip() {
       return this.$store.getters.clipById(this.$route.params.id);
+    },
+    videoUrlFragment1() {
+      return this.clip["Vimeo-Link"].split("/")[3];
+    },
+    videoUrlFragment2() {
+      return this.clip["Vimeo-Link"].split("/")[4];
     },
     image() {
       return this.clip && this.clip["Vorschaubild"]
