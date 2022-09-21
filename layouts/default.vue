@@ -1,14 +1,36 @@
 <template>
-  <div class="bg-white h-full flex flex-col">
-    <h1 class="text-2xl block px-8 pt-8 pb-4 text-thunderbird-red">
-      <nuxt-link to="/">Flimclips</nuxt-link>
-    </h1>
-    <Nuxt class="flex-1" />
+  <div class="pb-8">
+    <HfhHeaderBar>
+      <template v-slot:right>
+        <HfhMenu :items="menuItems" variant="tertiary" />
+      </template>
+    </HfhHeaderBar>
+    <div class="mx-4 xl:max-w-container xl:mx-auto">
+      <HfhLink
+        href="/"
+        :useDefaultStyles="false"
+        class="inline-flex gap-x-4 mt-12 mb-12 items-center"
+      >
+        <HfhLogo />
+        <div class="text-2xl mb-[3px]">Filmclip-Datenbank</div>
+      </HfhLink>
+    </div>
+    <div class="mx-4 xl:max-w-container xl:mx-auto">
+      <slot />
+    </div>
   </div>
 </template>
 
-<script>
-export default {};
+<script setup>
+import {
+  HfhHeaderBar,
+  HfhMenu,
+  HfhLogo,
+  HfhLink,
+} from "@hfh-dlc/hfh-styleguide";
+const menuItems = [
+  { label: "hfh.ch", link: { href: "https://hfh.ch", target: "_blank" } },
+];
 </script>
 
 <style lang="scss" scoped>

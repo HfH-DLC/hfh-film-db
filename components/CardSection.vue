@@ -1,35 +1,30 @@
 <template>
   <div v-if="content">
-    <div
-      class="
-        uppercase
-        text-xs
-        font-bold
-        text-thunderbird-red
-        group-hover:text-white
-        group-focus-visible:text-white
-      "
-    >
+    <div class="hfh-label">
       {{ label }}
     </div>
     <div v-html="content" />
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    content: {
-      type: String,
-      default: "",
-    },
+<script setup>
+import { HfhLabel } from "@hfh-dlc/hfh-styleguide";
+defineProps({
+  label: {
+    type: String,
+    required: true,
   },
-};
+  content: {
+    type: String,
+    default: "",
+  },
+});
 </script>
 
 <style lang="scss" scoped>
+.hfh-teaser:hover {
+  .hfh-label {
+    color: var(--c-white);
+  }
+}
 </style>

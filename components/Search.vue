@@ -1,79 +1,43 @@
 <template>
   <form @submit.prevent="search" class="relative">
-    <label
-      class="
-        block
-        mb-0.5
-        text-xs
-        font-bold
-        uppercase
-        text-thunderbird-red
-        px-1.5
-        leading-6
-        absolute
-        -top-3
-        left-2
-        bg-white
-      "
-      for="search"
-      >Suche</label
-    >
-    <div class="flex items-center justify-start gap-4">
-      <input
-        v-model="searchtext"
-        @search="search"
-        id="search"
-        type="search"
-        class="
-          block
-          w-48
-          border-2 border-thunderbird-red
-          placeholder-thunderbird-red
-          text-lg
-          leading-6
-          py-3.5
-          px-5
-          flex-1
-          md:flex-none
-        "
-        placeholder="Suchbegriff"
-      />
-      <button
-        class="
-          bg-black
-          text-white
-          font-bold
-          py-4
-          pl-6
-          pr-14
-          text-left
-          leading-6
-          appearance-none
-          cursor-pointer
-          focus:bg-thunderbird-red
-          hover:bg-thunderbird-red
-          search-icon
-        "
-        type="submit"
+    <div class="flex items-end justify-start gap-4">
+      <div>
+        <HfhInput
+          v-model="inputValue"
+          id="search"
+          type="search"
+          placeholder="Suchbegriff"
+          label="Suche"
+        />
+      </div>
+      <HfhButton type="submit" icon="search" :animated="false"
+        >Suchen</HfhButton
       >
-        Suchen
-      </button>
     </div>
   </form>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      searchtext: "",
-    };
+<script setup>
+import { reactive } from "vue";
+import { HfhButton, HfhInput } from "@hfh-dlc/hfh-styleguide";
+const emit = defineEmits(["search"]);
+const props = defineProps({
+  searchText: {
+    type: String,
+    default: "",
   },
-  methods: {
-    search() {
-      this.$emit("submit", { text: this.searchtext });
-    },
-  },
+});
+const inputValue = ref(props.searchText);
+
+watch(
+  () => props.searchText,
+  (newVal) => {
+    inputValue.value = newVal;
+  }
+);
+
+const search = () => {
+  emit("search", inputValue);
 };
 </script>
 

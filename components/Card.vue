@@ -1,38 +1,21 @@
 <template>
-  <div
-    class="
-      border-2 border-fantasy-plain
-      overflow-hidden
-      hover:bg-thunderbird-red hover:text-white hover:border-thunderbird-red
-      group-focus-visible:bg-thunderbird-red
-      group-focus-visible:text-white
-      group-focus-visible:border-thunderbird-red
-      group
-    "
-  >
-    <div class="bg-fantasy-plain">
-      <div
-        class="aspect-video bg-cover"
-        :style="{
-          backgroundImage: backgroundImage(clip),
-        }"
-      ></div>
-    </div>
-    <div class="group-hover:text-white pt-4 px-4 text-lg">
-      Clip {{ clip["Clip Nr."] }}
-    </div>
-    <div class="p-4 gap-4 grid">
+  <HfhTeaser :imageSrc="imageSrc" imageAlt="" :title="title">
+    <div class="gap-4 grid">
       <CardSection label="Behinderung" :content="behinderung" />
       <CardSection label="Thema" :content="thema" />
       <CardSection label="Heilpädagogische Relevanz" :content="relevanz" />
       <CardSection label="Film" :content="filmtitel" />
       <CardSection label="Schlüsselwörter" :content="keywords" />
     </div>
-  </div>
+  </HfhTeaser>
 </template>
 
 <script>
+import { HfhTeaser } from "@hfh-dlc/hfh-styleguide";
 export default {
+  components: {
+    HfhTeaser,
+  },
   props: {
     clip: {
       type: Object,
@@ -64,6 +47,21 @@ export default {
         ? this.highlight(this.clip["keywords"].join(", "))
         : "";
     },
+    imageSrc() {
+      if (
+        this.clip["Vorschaubild"] &&
+        this.clip["Vorschaubild"][0] &&
+        this.clip["Vorschaubild"][0].thumbnails &&
+        this.clip["Vorschaubild"][0].thumbnails.large &&
+        this.clip["Vorschaubild"][0].thumbnails.large.url
+      ) {
+        return this.clip["Vorschaubild"][0].thumbnails.large.url;
+      }
+      return "";
+    },
+    title() {
+      return `Clip ${this.clip["Clip Nr."]}`;
+    },
   },
   methods: {
     highlight(content) {
@@ -75,18 +73,6 @@ export default {
         });
       }
       return content;
-    },
-    backgroundImage(clip) {
-      if (
-        clip["Vorschaubild"] &&
-        clip["Vorschaubild"][0] &&
-        clip["Vorschaubild"][0].thumbnails &&
-        clip["Vorschaubild"][0].thumbnails.large &&
-        clip["Vorschaubild"][0].thumbnails.large.url
-      ) {
-        return "url(" + clip["Vorschaubild"][0].thumbnails.large.url + ")";
-      }
-      return "";
     },
   },
 };

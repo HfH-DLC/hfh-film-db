@@ -1,15 +1,6 @@
 <template>
   <div class="mt-4">
-    <div
-      class="
-        uppercase
-        text-xs
-        font-bold
-        text-thunderbird-red
-        group-hover:text-white
-        group-focus-visible:text-white
-      "
-    >
+    <div class="hfh-label">
       {{ label }}
     </div>
     <div>
@@ -18,15 +9,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
+<script setup>
+import { HfhLabel } from "@hfh-dlc/hfh-styleguide";
+const props = defineProps({
+  label: {
+    type: String,
+    required: true,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
