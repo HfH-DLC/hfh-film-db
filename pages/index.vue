@@ -39,6 +39,7 @@ import { HfhFilterGroup, HfhSelect } from "@hfh-dlc/hfh-styleguide";
 import { onMounted } from "vue";
 
 const route = useRoute();
+const { restoreScrollPosition } = useScrollPosition();
 
 const {
   clips,
@@ -94,6 +95,7 @@ useAsyncData(async () => {
   await fetchFilters();
   setFiltersFromRoute();
   await fetchClips();
+  restoreScrollPosition();
 });
 
 const onPopState = async () => {
