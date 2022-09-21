@@ -80,10 +80,6 @@
 const { fetchClip, clips } = useClips();
 const route = useRoute();
 
-definePageMeta({
-  middleware: ["scroll-position"],
-});
-
 const clip = computed(() =>
   clips.value.find((clip) => clip.id == route.params.id)
 );

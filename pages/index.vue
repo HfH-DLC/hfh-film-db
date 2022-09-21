@@ -39,7 +39,6 @@ import { HfhFilterGroup, HfhSelect } from "@hfh-dlc/hfh-styleguide";
 import { onMounted } from "vue";
 
 const route = useRoute();
-const { restoreScrollPosition } = useScrollPosition();
 
 const {
   clips,
@@ -49,11 +48,13 @@ const {
   fetchFilters,
   searchText,
   loading,
+  resetSearchAndFilters,
 } = useClips();
 
 const router = useRouter();
 
 const setFiltersFromRoute = () => {
+  resetSearchAndFilters();
   searchText.value = route.query.searchText ? route.query.searchText : "";
   Object.entries(route.query)
     .filter(([key]) => key !== "searchText")
@@ -83,11 +84,7 @@ const onFilterChange = (value, filter) => {
 };
 
 const onFiltersReset = () => {
-  filters.value.forEach((filter) => {
-    filter.value = filter.defaultValue;
-  });
-  searchText.value = "";
-  router.push({ query: {} });
+  resetSearchAndFilters();
   fetchClips();
 };
 
@@ -95,21 +92,6 @@ useAsyncData(async () => {
   await fetchFilters();
   setFiltersFromRoute();
   await fetchClips();
-  restoreScrollPosition();
-});
-
-const onPopState = async () => {
-  await fetchFilters();
-  setFiltersFromRoute();
-  await fetchClips();
-};
-
-onMounted(() => {
-  window.addEventListener("popstate", onPopState);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("popstate", onPopState);
 });
 </script>
 

@@ -99,6 +99,12 @@ export default function () {
       loading.value = false;
     }
   };
+  const resetSearchAndFilters = () => {
+    filters.value.forEach((filter) => {
+      filter.value = filter.defaultValue;
+    });
+    searchText.value = "";
+  };
   return {
     clips,
     searchText,
@@ -108,5 +114,6 @@ export default function () {
     fetchClip,
     fetchClips,
     fetchFilters,
+    resetSearchAndFilters,
   };
 }
