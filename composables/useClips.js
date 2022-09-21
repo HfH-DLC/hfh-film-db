@@ -1,8 +1,10 @@
+import isEqual from "lodash.isequal";
 export default function () {
   const loading = useState("loading", () => false);
   const clips = useState("clips", () => []);
   const searchText = useState("searchText", () => "");
   const filters = useState("filters", () => []);
+  const loadedSearchParams = useState("loadedSearchParams", () => null);
 
   const searchParams = computed(() => {
     let params = {};
@@ -35,12 +37,16 @@ export default function () {
   };
 
   const fetchClips = async () => {
+    if (isEqual(searchParams.value, loadedSearchParams.value)) {
+      return;
+    }
     try {
       loading.value = true;
       const response = await $fetch(`/api/clips`, {
         params: searchParams.value,
       });
       clips.value = response.records;
+      loadedSearchParams.value = searchParams.value;
     } catch (error) {
       //todo error handling
       console.log(error);
@@ -65,6 +71,9 @@ export default function () {
     }
   };
   const fetchFilters = async (params) => {
+    if (filters.value.length > 0) {
+      return;
+    }
     try {
       loading.value = true;
       const response = await $fetch(`/api/fields`, { params });
