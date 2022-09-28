@@ -1,4 +1,5 @@
 import isEqual from "lodash.isequal";
+import { FILTER_TYPE_RANGE, FILTER_TYPE_SELECT } from "~~/consts";
 export default function () {
   const loading = useState("loading", () => false);
   const clips = useState("clips", () => []);
@@ -15,7 +16,7 @@ export default function () {
     if (activeFilters.length > 0) {
       const filterParams = {
         ...activeFilters.reduce((acc, cur) => {
-          acc[`${cur.field}`] = cur.value;
+          acc = getQueryParams(acc, cur);
           return acc;
         }, {}),
       };
@@ -27,8 +28,18 @@ export default function () {
     return params;
   });
 
-  const setFilter = ({ field, value }) => {
-    const filter = filters.value.find((filter) => filter.field === field);
+  const getQueryParams = (acc, filter) => {
+    if (filter.type === FILTER_TYPE_SELECT) {
+      acc[filter.params.value] = filter.value;
+    } else if (filter.type === FILTER_TYPE_RANGE) {
+      acc[filter.params.start] = filter.value.start;
+      acc[filter.params.end] = filter.value.end;
+    }
+    return acc;
+  };
+
+  const setFilter = (id, value) => {
+    const filter = filters.value.find((filter) => filter.id === id);
     if (filter) {
       filter.value = value;
     } else {
@@ -76,22 +87,8 @@ export default function () {
     }
     try {
       loading.value = true;
-      const response = await $fetch(`/api/fields`, { params });
-      const fetchedFilters = Object.entries(response.fields).map(
-        ([key, values]) => {
-          return {
-            field: key,
-            label: key,
-            options: values.map((fieldValue) => {
-              return { label: fieldValue, value: fieldValue };
-            }),
-            value: "",
-            defaultValue: "",
-          };
-        }
-      );
-
-      filters.value = fetchedFilters;
+      const response = await $fetch(`/api/filters`, { params });
+      filters.value = response.filters;
     } catch (error) {
       //todo error handling
       console.log(error);

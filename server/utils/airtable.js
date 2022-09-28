@@ -1,3 +1,4 @@
+import { isArray } from "@vue/shared";
 import Airtable from "airtable";
 const config = useRuntimeConfig();
 
@@ -5,8 +6,48 @@ const airtableBase = new Airtable({
   apiKey: config.airtableApiKey,
 }).base(config.airtableBase);
 
-const allowedFilters = ["Behinderung", "Thema"];
-const selectFields = ["Behinderung", "Thema"];
+import { FILTER_TYPE_RANGE, FILTER_TYPE_SELECT } from "../../consts";
+
+const allowedFilters = [
+  {
+    id: "behinderung",
+    field: "Behinderung",
+    type: "select",
+    params: { value: "behinderung" },
+    label: "Behinderung",
+  },
+  {
+    id: "thema",
+    field: "Thema",
+    type: FILTER_TYPE_SELECT,
+    params: { value: "thema" },
+    label: "Thema",
+  },
+  {
+    id: "altersgruppe",
+    field: "Altersgruppe behinderte Person",
+    type: FILTER_TYPE_SELECT,
+    params: { value: "altersgruppe" },
+    label: "Altersgruppe",
+  },
+  {
+    id: "land",
+    field: "Film_Land",
+    type: FILTER_TYPE_SELECT,
+    params: { value: "land" },
+    label: "Produktionsland",
+  },
+  {
+    id: "laenge",
+    field: "Länge",
+    type: FILTER_TYPE_RANGE,
+    params: { start: "laenge_start", end: "laenge_end" },
+    label: "Länge",
+    startLabel: "Mindestlänge",
+    endLabel: "Maximallänge",
+    step: 10,
+  },
+];
 const searchTextFields = [
   "Behinderung",
   "Thema",
@@ -57,8 +98,27 @@ const getSearchTextFormula = (text) => {
   return `AND(${queries.join(", ")})`;
 };
 
-const getFilterFormula = (field, value) => {
-  return `FIND('${value.toLowerCase()}', LOWER({${field}}))`;
+const getFilterFormula = (filter, query) => {
+  if (filter.type === FILTER_TYPE_SELECT) {
+    const value = query[filter.params.value];
+    if (value) {
+      return `FIND('${value.toLowerCase()}', LOWER({${filter.field}}))`;
+    }
+  }
+  if (filter.type === FILTER_TYPE_RANGE) {
+    const start = query[filter.params.start];
+    const end = query[filter.params.end];
+    if (!(start || end)) {
+      return "";
+    }
+    if (!start) {
+      return `{${filter.field}}<=${end}`;
+    }
+    if (!end) {
+      return `{${filter.field}}>=${start}`;
+    }
+    return `AND({${filter.field}}>=${start},{${filter.field}}<=${end})`;
+  }
 };
 
 const getRecords = async (table, options) => {
@@ -89,20 +149,50 @@ const isLookupField = (key) => {
   return key.startsWith("Film_");
 };
 
-const getUniqueFieldValues = async () => {
+const getFiltersWithOptions = async () => {
+  const fields = allowedFilters.map((filter) => filter.field);
   const records = await airtableBase("Clips")
     .select({
-      fields: selectFields,
+      fields,
     })
     .all();
-  return selectFields.reduce((acc, cur) => {
-    const fieldValues = records.map((record) => {
-      return record.fields[cur];
+  return allowedFilters.reduce((acc, filter) => {
+    const options = [];
+    records.forEach((record) => {
+      const value = record.fields[filter.field];
+      if (isArray(value)) {
+        options.push(...value);
+      } else {
+        options.push(value);
+      }
     });
-    const set = new Set(fieldValues);
-    acc[cur] = [...set];
+    const set = new Set(options);
+    if (filter.type === FILTER_TYPE_SELECT) {
+      acc.push({
+        ...filter,
+        options: [...set]
+          .sort()
+          .map((option) => ({ label: option, value: option })),
+        value: "",
+        defaultValue: "",
+      });
+    }
+    if (filter.type === FILTER_TYPE_RANGE) {
+      const values = [...set].sort((a, b) => a - b);
+      if (values.length > 0) {
+        const min = Math.floor(values[0] / filter.step) * filter.step;
+        const max =
+          Math.ceil(values[values.length - 1] / filter.step) * filter.step;
+        const filterData = {
+          ...filter,
+          min,
+          max,
+        };
+        acc.push(filterData);
+      }
+    }
     return acc;
-  }, {});
+  }, []);
 };
 
 export default {
@@ -111,5 +201,5 @@ export default {
   getFilterFormula,
   getRecords,
   getSingleRecord,
-  getUniqueFieldValues,
+  getFiltersWithOptions,
 };

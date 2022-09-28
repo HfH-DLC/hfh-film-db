@@ -2,17 +2,31 @@
   <div class="flex flex-col mx-auto w-full">
     <Search @search="onSearchTextChange" :searchText="searchText" />
     <HfhFilterGroup class="mt-4 mb-8" @reset="onFiltersReset">
-      <HfhSelect
-        v-for="filter in filters"
-        :key="filter.name"
-        :modelValue="filter.value"
-        :id="filter.field"
-        :name="filter.field"
-        :label="filter.label"
-        :options="filter.options"
-        defaultOption="Bitte wählen..."
-        @update:modelValue="onFilterChange($event, filter)"
-      />
+      <template v-for="filter in filters" :key="filter.id">
+        <HfhSelect
+          v-if="filter.type === FILTER_TYPE_SELECT"
+          :modelValue="filter.value"
+          :id="filter.id"
+          :label="filter.label"
+          :options="filter.options"
+          defaultOption="Bitte wählen..."
+          @update:modelValue="onFilterChange($event, filter)"
+        />
+        <div v-if="filter.type === FILTER_TYPE_RANGE">
+          <HfhMultiRange
+            :min="filter.min"
+            :max="filter.max"
+            :step="filter.step"
+            :modelValue="filter.value"
+            :id="filter.id"
+            :label="filter.label"
+            :startLabel="filter.startLabel"
+            :endLabel="filter.endLabel"
+            @update:modelValue="onFilterChange($event, filter)"
+            :formattingCallback="secondsToString"
+          ></HfhMultiRange>
+        </div>
+      </template>
     </HfhFilterGroup>
     <LoadingIndicator v-if="loading" class="mx-auto" />
     <ul
@@ -35,8 +49,17 @@
 </template>
 
 <script setup>
-import { HfhFilterGroup, HfhSelect } from "@hfh-dlc/hfh-styleguide";
+import debounce from "lodash.debounce";
 import { onMounted } from "vue";
+import { FILTER_TYPE_RANGE, FILTER_TYPE_SELECT } from "../consts";
+import {
+  HfhFilterGroup,
+  HfhSelect,
+  HfhMultiRange,
+} from "@hfh-dlc/hfh-styleguide";
+import { secondsToString } from "../helpers";
+
+const range = ref();
 
 const route = useRoute();
 
@@ -56,11 +79,29 @@ const router = useRouter();
 const setFiltersFromRoute = () => {
   resetSearchAndFilters();
   searchText.value = route.query.searchText ? route.query.searchText : "";
-  Object.entries(route.query)
-    .filter(([key]) => key !== "searchText")
-    .forEach(([key, value]) => {
-      setFilter({ field: key, value: value });
+
+  filters.value.forEach((filter) => {
+    const keys = Object.keys(route.query).filter((key) => {
+      return Object.values(filter.params).includes(key);
     });
+    if (keys.length > 0) {
+      const values = keys.reduce((acc, cur) => {
+        const attributeEntry = Object.entries(filter.params).find(
+          (entry) => entry[1] == cur
+        );
+        if (attributeEntry) {
+          const attributeName = attributeEntry[0];
+          if (keys.length == 1 && attributeName == "value") {
+            acc = route.query[cur];
+          } else {
+            acc[attributeName] = route.query[cur];
+          }
+        }
+        return acc;
+      }, {});
+      setFilter(filter.id, values);
+    }
+  });
 };
 
 const onSearchTextChange = (newValueRef) => {
@@ -74,16 +115,27 @@ const onSearchTextChange = (newValueRef) => {
 
 const onFilterChange = (value, filter) => {
   const query = { ...route.query };
-  query[filter.field] = value;
-  router.push({
-    query,
-  });
-  router.push({ query });
-  setFilter({ field: filter.field, value });
-  fetchClips();
+  if (filter.type === FILTER_TYPE_SELECT) {
+    query[filter.params.value] = value;
+  }
+  if (filter.type === FILTER_TYPE_RANGE) {
+    query[filter.params.start] = value.start;
+    query[filter.params.end] = value.end;
+  }
+  setFilter(filter.id, value);
+  debouncedFilterUpdate(query);
 };
 
+const debouncedFilterUpdate = debounce((query) => {
+  console.log("debounced");
+  router.push({ query });
+  fetchClips();
+}, 500);
+
 const onFiltersReset = () => {
+  router.push({
+    query: null,
+  });
   resetSearchAndFilters();
   fetchClips();
 };
