@@ -24,7 +24,7 @@
     >
     <template #contact-other>
       <p>T +41 44 317 11 11</p>
-      <p>info@hfh.ch</p>
+      <p><a href="mailto:info@hfh.ch">info@hfh.ch</a></p>
     </template>
     <template #socials>
       <HfhSocialBlock icon="facebook" href="https://www.facebook.com/hfh.edu" />
