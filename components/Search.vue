@@ -42,11 +42,4 @@ const search = () => {
 </script>
 
 <style scoped>
-.search-icon {
-  @apply bg-search bg-no-repeat bg-size-search bg-pos-search;
-}
-.search-icon:hover,
-.search-icon:focus {
-  @apply bg-search-active;
-}
 </style>

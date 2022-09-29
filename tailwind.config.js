@@ -22,18 +22,6 @@ module.exports = {
       scale: {
         101: "1.01",
       },
-      backgroundImage: {
-        "dropdown-arrow": "url('@/assets/images/dropdown-arrow.png')",
-        search: "url('@/assets/images/search.svg')",
-        "search-active": "url('@/assets/images/search-active.svg')",
-      },
-      backgroundSize: {
-        "size-search": "22px 22px",
-        "size-arrow": "32px 9px",
-      },
-      backgroundPosition: {
-        "pos-search": "calc(100% - 16px) 50%",
-      },
       gridTemplateColumns: {
         "index-xs": "repeat(auto-fill, minmax(100%, 1fr))",
         index: "repeat(auto-fill, minmax(320px, 1fr))",
