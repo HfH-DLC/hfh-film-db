@@ -5,6 +5,6 @@ export default <RouterConfig>{
     if (savedPosition) {
       setTimeout(() => window.scrollTo(savedPosition), 50);
     }
-    return savedPosition;
+    return { top: 0, left: 0 };
   },
 };
