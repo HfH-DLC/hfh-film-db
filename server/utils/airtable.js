@@ -6,7 +6,11 @@ const airtableBase = new Airtable({
   apiKey: config.airtableApiKey,
 }).base(config.airtableBase);
 
-import { FILTER_TYPE_RANGE, FILTER_TYPE_SELECT } from "../../consts";
+import {
+  FILTER_FORMAT_TIME,
+  FILTER_TYPE_RANGE,
+  FILTER_TYPE_SELECT,
+} from "../../consts";
 
 const allowedFilters = [
   {
@@ -38,6 +42,16 @@ const allowedFilters = [
     label: "Produktionsland",
   },
   {
+    id: "jahr",
+    field: "Film_Jahr",
+    type: FILTER_TYPE_RANGE,
+    params: { start: "jahr_start", end: "jahr_end" },
+    label: "Produktionsjahr",
+    startLabel: "Frühstes Jahr",
+    endLabel: "Spätestes Jahr",
+    step: 1,
+  },
+  {
     id: "laenge",
     field: "Länge",
     type: FILTER_TYPE_RANGE,
@@ -46,6 +60,7 @@ const allowedFilters = [
     startLabel: "Mindestlänge",
     endLabel: "Maximallänge",
     step: 10,
+    format: FILTER_FORMAT_TIME,
   },
 ];
 const searchTextFields = [
