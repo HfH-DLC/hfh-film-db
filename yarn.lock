@@ -301,10 +301,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.15.9.tgz#b658a97babf1f40783354af7039b84c3fdfc3fc3"
   integrity sha512-O+NfmkfRrb3uSsTa4jE3WApidSe3N5++fyOVGP1SmMZi4A3BZELkhUUvj5hwmMuNdlpzAZ8iAPz2vmcR7DCFQA==
 
-"@hfh-dlc/hfh-styleguide@^1.0.46":
-  version "1.0.46"
-  resolved "https://npm.pkg.github.com/download/@hfh-dlc/hfh-styleguide/1.0.46/02bec7df84fb6e8f788d438418361f9aa124668f#02bec7df84fb6e8f788d438418361f9aa124668f"
-  integrity sha512-gAlCjIb8hJCJO63978AqyQc2L1OWC0O1lCigFYjbgsH7Z75coHDe9WkF4JNChU477/9SYvi9rubATrjk/28OQw==
+"@hfh-dlc/hfh-styleguide@1.0.47":
+  version "1.0.47"
+  resolved "https://npm.pkg.github.com/download/@hfh-dlc/hfh-styleguide/1.0.47/82bb4491c72509a9c9dceae3a5a1739c8a52018a#82bb4491c72509a9c9dceae3a5a1739c8a52018a"
+  integrity sha512-jBwwgSZozrK6xBb5oVweKvg9t/TGl7ySll1QiXXdiAaYrmh2vW09Sto9/H6ovGd0NX1xSXkHDU39IM+h6jdrkA==
   dependencies:
     lodash.debounce "^4.0.8"
     vue "^3.2.40"
