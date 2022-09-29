@@ -23,7 +23,7 @@
             :startLabel="filter.startLabel"
             :endLabel="filter.endLabel"
             @update:modelValue="onFilterChange($event, filter)"
-            :formattingCallback="secondsToString"
+            :formattingCallback="getFilterFormat(filter.format)"
           ></HfhMultiRange>
         </div>
       </template>
@@ -51,7 +51,11 @@
 <script setup>
 import debounce from "lodash.debounce";
 import { onMounted } from "vue";
-import { FILTER_TYPE_RANGE, FILTER_TYPE_SELECT } from "../consts";
+import {
+  FILTER_FORMAT_TIME,
+  FILTER_TYPE_RANGE,
+  FILTER_TYPE_SELECT,
+} from "../consts";
 import {
   HfhFilterGroup,
   HfhSelect,
@@ -75,6 +79,13 @@ const {
 } = useClips();
 
 const router = useRouter();
+
+const getFilterFormat = (format) => {
+  if (format === FILTER_FORMAT_TIME) {
+    return secondsToString;
+  }
+  return (value) => value;
+};
 
 const setFiltersFromRoute = () => {
   resetSearchAndFilters();
