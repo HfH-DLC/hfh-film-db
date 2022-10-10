@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
       conditions.push(filterCondition);
     }
   });
-  console.log("conditions", conditions);
   const formula = `AND(${conditions.join(", ")})`;
   const records = await helpers.getRecords("Clips", {
     sort: [{ field: "Clip Nr.", direction: "asc" }],
