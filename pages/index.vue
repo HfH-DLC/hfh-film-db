@@ -138,7 +138,6 @@ const onFilterChange = (value, filter) => {
 };
 
 const debouncedFilterUpdate = debounce((query) => {
-  console.log("debounced");
   router.push({ query });
   fetchClips();
 }, 500);
