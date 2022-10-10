@@ -16,7 +16,7 @@ const allowedFilters = [
   {
     id: "behinderung",
     field: "Behinderung",
-    type: "select",
+    type: FILTER_TYPE_SELECT,
     params: { value: "behinderung" },
     label: "Behinderung",
   },
@@ -175,6 +175,9 @@ const getFiltersWithOptions = async () => {
     const options = [];
     records.forEach((record) => {
       const value = record.fields[filter.field];
+      if (value == undefined) {
+        return;
+      }
       if (isArray(value)) {
         options.push(...value);
       } else {
