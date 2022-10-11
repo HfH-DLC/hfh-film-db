@@ -87,39 +87,7 @@ const getFilterFormat = (format) => {
   return (value) => value;
 };
 
-const setFiltersFromRoute = () => {
-  resetSearchAndFilters();
-  searchText.value = route.query.searchText ? route.query.searchText : "";
-
-  filters.value.forEach((filter) => {
-    const keys = Object.keys(route.query).filter((key) => {
-      return Object.values(filter.params).includes(key);
-    });
-    if (keys.length > 0) {
-      const values = keys.reduce((acc, cur) => {
-        const attributeEntry = Object.entries(filter.params).find(
-          (entry) => entry[1] == cur
-        );
-        if (attributeEntry) {
-          const attributeName = attributeEntry[0];
-          if (keys.length == 1 && attributeName == "value") {
-            acc = route.query[cur];
-          } else {
-            acc[attributeName] = route.query[cur];
-          }
-        }
-        return acc;
-      }, {});
-      setFilter(filter.id, values);
-    }
-  });
-};
-
 const onSearchTextChange = (newValueRef) => {
-  const query = { ...route.query, searchText: newValueRef.value };
-  router.push({
-    query,
-  });
   searchText.value = newValueRef.value;
   fetchClips();
 };
@@ -138,21 +106,18 @@ const onFilterChange = (value, filter) => {
 };
 
 const debouncedFilterUpdate = debounce((query) => {
-  router.push({ query });
   fetchClips();
 }, 500);
 
 const onFiltersReset = () => {
-  router.push({
-    query: null,
-  });
   resetSearchAndFilters();
   fetchClips();
 };
 
 useAsyncData(async () => {
+  console.log("asyncData", filters.value);
   await fetchFilters();
-  setFiltersFromRoute();
+  //resetSearchAndFilters();
   await fetchClips();
 });
 </script>
