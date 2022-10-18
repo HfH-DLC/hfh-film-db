@@ -106,6 +106,9 @@ const onPageSelected = (number) => {
 </script>
 
 <style lang="scss" scoped>
+ul {
+  flex-wrap: wrap;
+}
 li {
   font-size: 1rem;
   font-weight: 700;
