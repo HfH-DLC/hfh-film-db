@@ -101,6 +101,7 @@ const getFilterFormat = (format) => {
 
 const onSearchTextChange = (newValueRef) => {
   searchText.value = newValueRef.value;
+  currentPage.value = 1;
   fetchClips();
 };
 
@@ -118,11 +119,13 @@ const onFilterChange = (value, filter) => {
 };
 
 const debouncedFilterUpdate = debounce((query) => {
+  currentPage.value = 1;
   fetchClips();
 }, 500);
 
 const onFiltersReset = () => {
   resetSearchAndFilters();
+  currentPage.value = 1;
   fetchClips();
 };
 
