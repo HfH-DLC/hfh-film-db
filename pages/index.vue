@@ -30,7 +30,7 @@
     </HfhFilterGroup>
     <LoadingIndicator v-if="loading" class="mx-auto" />
     <div v-else-if="clips.length > 0">
-      <h2 aria-live="polite" class="text-xl mb-10">
+      <h2 aria-live="polite" class="text-xl mb-10" ref="results">
         <strong class="font-bold">{{ totalRecords }}</strong> Clips<span
           v-if="totalPages > 1"
           >, Seite {{ currentPage }} von {{ totalPages }}</span
@@ -61,23 +61,23 @@
 
 <script setup>
 import debounce from "lodash.debounce";
-import {
-  FILTER_FORMAT_TIME,
-  FILTER_TYPE_RANGE,
-  FILTER_TYPE_SELECT,
-} from "../consts";
+import { ref } from "vue";
 import {
   HfhFilterGroup,
   HfhSelect,
   HfhMultiRange,
 } from "@hfh-dlc/hfh-styleguide";
+
+import {
+  FILTER_FORMAT_TIME,
+  FILTER_TYPE_RANGE,
+  FILTER_TYPE_SELECT,
+} from "../consts";
 import { secondsToString } from "../helpers";
 import Pagination from "../components/Pagination.vue";
 
-const range = ref();
-
 const route = useRoute();
-
+const router = useRouter();
 const {
   clips,
   filters,
@@ -91,8 +91,6 @@ const {
   totalPages,
   totalRecords,
 } = useClips();
-
-const router = useRouter();
 
 const getFilterFormat = (format) => {
   if (format === FILTER_FORMAT_TIME) {
@@ -128,9 +126,12 @@ const onFiltersReset = () => {
   fetchClips();
 };
 
+const results = ref(null);
+
 const setPage = (page) => {
   currentPage.value = page;
   fetchClips();
+  scrollTo(results.value.offsetLeft, results.value.offsetTop);
 };
 
 useAsyncData(async () => {
