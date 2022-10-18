@@ -6,6 +6,10 @@ export default function () {
   const searchText = useState("searchText", () => "");
   const filters = useState("filters", () => []);
   const loadedSearchParams = useState("loadedSearchParams", () => null);
+  const pageSize = useState("pageSize", () => 18);
+  const currentPage = useState("currentPage", () => 1);
+  const totalPages = useState("totalPages", () => 0);
+  const totalRecords = useState("totalRecords", () => 0);
 
   const searchParams = computed(() => {
     let params = {};
@@ -25,7 +29,11 @@ export default function () {
         ...filterParams,
       };
     }
-    return params;
+    return {
+      ...params,
+      currentPage: currentPage.value,
+      pageSize: pageSize.value,
+    };
   });
 
   const getQueryParams = (acc, filter) => {
@@ -57,6 +65,10 @@ export default function () {
         params: searchParams.value,
       });
       clips.value = response.records;
+      pageSize.value = parseInt(response.pageSize);
+      currentPage.value = parseInt(response.currentPage);
+      totalPages.value = parseInt(response.totalPages);
+      totalRecords.value = parseInt(response.totalRecords);
       loadedSearchParams.value = searchParams.value;
     } catch (error) {
       //todo error handling
@@ -112,5 +124,8 @@ export default function () {
     fetchClips,
     fetchFilters,
     resetSearchAndFilters,
+    currentPage,
+    totalPages,
+    totalRecords,
   };
 }

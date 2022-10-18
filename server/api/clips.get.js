@@ -19,5 +19,17 @@ export default defineEventHandler(async (event) => {
     filterByFormula: formula,
   });
 
-  return { records };
+  const startIndex = (query.currentPage - 1) * query.pageSize;
+  const endIndex = query.currentPage * query.pageSize;
+
+  const currentPageRecords = records.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(records.length / query.pageSize);
+  console.log("totalPages", totalPages);
+  return {
+    records: currentPageRecords,
+    pageSize: query.pageSize,
+    currentPage: query.currentPage,
+    totalPages: totalPages,
+    totalRecords: records.length,
+  };
 });

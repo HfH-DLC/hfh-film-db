@@ -29,19 +29,30 @@
       </template>
     </HfhFilterGroup>
     <LoadingIndicator v-if="loading" class="mx-auto" />
-    <ul
-      v-else-if="clips.length > 0"
-      class="grid grid-cols-index-xs sm:grid-cols-index gap-4"
-    >
-      <li v-for="clip in clips" :key="clip.ClipNummer" class="h-full">
-        <NuxtLink
-          :to="`/clips/${clip.id}`"
-          class="focus-visible:outline-none group"
+    <div v-else-if="clips.length > 0">
+      <h2 aria-live="polite" class="text-xl mb-10">
+        <strong class="font-bold">{{ totalRecords }}</strong> Clips<span
+          v-if="totalPages > 1"
+          >, Seite {{ currentPage }} von {{ totalPages }}</span
         >
-          <Card :clip="clip" :searchText="searchText" class="h-full" />
-        </NuxtLink>
-      </li>
-    </ul>
+      </h2>
+      <ul class="grid grid-cols-index-xs sm:grid-cols-index gap-4">
+        <li v-for="clip in clips" :key="clip.ClipNummer" class="h-full">
+          <NuxtLink
+            :to="`/clips/${clip.id}`"
+            class="focus-visible:outline-none group"
+          >
+            <Card :clip="clip" :searchText="searchText" class="h-full" />
+          </NuxtLink>
+        </li>
+      </ul>
+      <Pagination
+        class="mt-16"
+        :currentPage="currentPage"
+        :lastPage="totalPages"
+        @pageSelected="setPage"
+      />
+    </div>
     <div v-else class="flex-1 flex items-center justify-center text-xl">
       Für Ihre Suche wurden leider keine passenden Resultate gefunden.
     </div>
@@ -50,7 +61,6 @@
 
 <script setup>
 import debounce from "lodash.debounce";
-import { onMounted } from "vue";
 import {
   FILTER_FORMAT_TIME,
   FILTER_TYPE_RANGE,
@@ -62,6 +72,7 @@ import {
   HfhMultiRange,
 } from "@hfh-dlc/hfh-styleguide";
 import { secondsToString } from "../helpers";
+import Pagination from "../components/Pagination.vue";
 
 const range = ref();
 
@@ -76,6 +87,9 @@ const {
   searchText,
   loading,
   resetSearchAndFilters,
+  currentPage,
+  totalPages,
+  totalRecords,
 } = useClips();
 
 const router = useRouter();
@@ -114,10 +128,13 @@ const onFiltersReset = () => {
   fetchClips();
 };
 
+const setPage = (page) => {
+  currentPage.value = page;
+  fetchClips();
+};
+
 useAsyncData(async () => {
-  console.log("asyncData", filters.value);
   await fetchFilters();
-  //resetSearchAndFilters();
   await fetchClips();
 });
 </script>
