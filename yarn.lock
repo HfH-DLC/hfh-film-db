@@ -303,7 +303,7 @@
 
 "@hfh-dlc/hfh-styleguide@1.0.51":
   version "1.0.51"
-  resolved "https://npm.pkg.github.com/download/@hfh-dlc/hfh-styleguide/1.0.51/fe88b6b46a91ecdda012d020a176f190fdafa976#fe88b6b46a91ecdda012d020a176f190fdafa976"
+  resolved "https://npm.pkg.github.com/download/@hfh-dlc/hfh-styleguide/1.0.51/fe88b6b46a91ecdda012d020a176f190fdafa976"
   integrity sha512-IGiyJQDphSmQd8mUwDOUyi5dAR1JUIhHDCx15ChJQYDZXG3J5emuihJ8IOh0fPp0xnA1qxZxl+0ePDAJuzHLaw==
   dependencies:
     lodash.debounce "^4.0.8"
@@ -1382,6 +1382,11 @@ cliui@^7.0.2:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
+
+clone@2.x:
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
+  integrity sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==
 
 clone@^1.0.2:
   version "1.0.4"
@@ -3439,6 +3444,13 @@ nitropack@^0.5.0:
     unenv "^0.6.2"
     unimport "^0.6.7"
     unstorage "^0.5.6"
+
+node-cache@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.npmjs.org/node-cache/-/node-cache-5.1.2.tgz"
+  integrity sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==
+  dependencies:
+    clone "2.x"
 
 node-domexception@^1.0.0:
   version "1.0.0"
