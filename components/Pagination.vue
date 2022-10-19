@@ -126,8 +126,8 @@ li {
   }
 
   &.currentPage {
-    color: var(--c-thunderbird-red);
-    background-color: var(--c-fantasy-plain);
+    color: var(--c-white);
+    background-color: var(--c-thunderbird-red);
     border-radius: 100%;
   }
 
