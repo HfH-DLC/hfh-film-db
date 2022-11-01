@@ -9,7 +9,7 @@
       <div class="mx-4 xl:max-w-container xl:mx-auto">
         <NuxtLink to="/" class="inline-flex gap-x-4 mt-12 mb-12 items-center">
           <HfhLogo />
-          <div class="text-2xl mb-[3px]">Filmclip-Datenbank</div>
+          <div class="text-2xl mb-[3px]">HandiClip</div>
         </NuxtLink>
       </div>
     </header>

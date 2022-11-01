@@ -7,7 +7,7 @@
           id="search"
           type="search"
           placeholder="Suchbegriff"
-          label="Suche"
+          label="Volltextsuche"
         />
       </div>
       <HfhButton type="submit" icon="search" :animated="false"
