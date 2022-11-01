@@ -64,6 +64,7 @@ const allowedFilters = [
   },
 ];
 const searchTextFields = [
+  "Clip Nr.",
   "Behinderung",
   "Thema",
   "Heilpädagogische Relevanz",
@@ -103,9 +104,9 @@ const getSearchTextFormula = (text) => {
   const queries = words.map((word) => {
     const conditions = searchTextFields.map((field) => {
       if (isLookupField(field)) {
-        return ` FIND('${word.toLowerCase()}', LOWER(ARRAYJOIN({${field}}), ' '))`;
+        return ` FIND('${word.toLowerCase()}', LOWER(ARRAYJOIN({${field}} & ""), ' '))`;
       }
-      return ` FIND('${word.toLowerCase()}', LOWER({${field}}))`;
+      return ` FIND('${word.toLowerCase()}', LOWER({${field}} & ""))`;
     });
     return `OR(${conditions.join(", ")})`;
   });
