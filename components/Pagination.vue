@@ -127,14 +127,14 @@ li {
 
   &.currentPage {
     color: var(--c-white);
-    background-color: var(--c-thunderbird-red);
+    background-color: var(--c-thunderbird-red-light);
     border-radius: 100%;
   }
 
   button {
     &:hover,
     &:focus-visible {
-      color: var(--c-thunderbird-red);
+      color: var(--c-thunderbird-red-light);
     }
   }
 }
