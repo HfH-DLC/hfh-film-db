@@ -74,7 +74,7 @@ export default {
       if (content && this.searchWords.length > 0) {
         this.searchWords.forEach((word) => {
           content = content.replace(new RegExp(word, "gi"), (match) => {
-            return '<span class="bg-yellow-400">' + match + "</span>";
+            return '<span class="bg-yellow-400 text-black">' + match + "</span>";
           });
         });
       }
