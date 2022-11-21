@@ -15,10 +15,9 @@ export default defineEventHandler(async (event) => {
   const conditions = [];
   conditions.push(`NOT({${FIELDNAMES.CLIP}} = '')`);
   if (query.searchText) {
-    conditions.push(helpers.getSearchTextFormula(query.searchText));
+      conditions.push(helpers.getSearchTextFormula(query.searchText));
   }
   FILTERS.filter((filter) => !filter.local).forEach((filter) => {
-    console.log("Filter", filter);
     const filterCondition = helpers.getFilterFormula(filter, query);
     if (filterCondition) {
       conditions.push(filterCondition);
