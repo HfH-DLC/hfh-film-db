@@ -51,7 +51,7 @@ if (config.enableVideo === true) {
 
 const getSearchTextFormula = (text) => {
   const words = text.trim().split(" ");
-  const queries = words.map((word) => {
+  const queries = words.filter(word => word.toLowerCase() != 'clip').map((word) => {
     const conditions = searchTextFields.map((field) => {
       if (field.lookup) {
         return ` FIND('${word.toLowerCase()}', LOWER(ARRAYJOIN({${
@@ -60,10 +60,12 @@ const getSearchTextFormula = (text) => {
       }
       return ` FIND('${word.toLowerCase()}', LOWER({${field.name}} & ""))`;
     });
+  
     return `OR(${conditions.join(", ")})`;
   });
 
-  return `AND(${queries.join(", ")})`;
+  const formula = `AND(${queries.join(", ")})`;
+  return formula;
 };
 
 const getFilterFormula = (filter, query) => {
