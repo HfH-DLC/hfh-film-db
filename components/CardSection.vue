@@ -3,7 +3,7 @@
     <div class="hfh-label">
       {{ label }}
     </div>
-    <div>{{ content }}</div>
+    <div v-html="content"></div>
   </div>
 </template>
 
