@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     conditions.push(helpers.getSearchTextFormula(query.searchText));
   }
   FILTERS.filter((filter) => !filter.local).forEach((filter) => {
+    console.log("Filter", filter);
     const filterCondition = helpers.getFilterFormula(filter, query);
     if (filterCondition) {
       conditions.push(filterCondition);
@@ -30,9 +31,9 @@ export default defineEventHandler(async (event) => {
       sort: [{ field: FIELDNAMES.CLIP, direction: "asc" }],
       filterByFormula: formula,
     });
-    records = applyLocalFilters(records, query);
     cache.set(formula, records);
   }
+  records = applyLocalFilters(records, query);
 
   const startIndex = (query.currentPage - 1) * query.pageSize;
   const endIndex = query.currentPage * query.pageSize;
