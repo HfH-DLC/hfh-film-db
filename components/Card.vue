@@ -1,5 +1,8 @@
 <template>
-  <HfhTeaser :imageSrc="imageSrc" imageAlt="" :title="title">
+  <HfhTeaser :imageSrc="imageSrc" imageAlt="" :title="title" >
+    <template v-slot:title>
+     <span v-html="highlightedTitle"></span>
+    </template>
     <div class="gap-4 grid">
       <CardSection label="Behinderung" :content="behinderung" />
       <CardSection label="Thema" :content="thema" />
@@ -44,7 +47,7 @@ export default {
     },
     keywords() {
       return this.clip["keywords"]
-        ? this.highlight(this.clip["keywords"]).join(", ")
+        ? this.highlight(this.clip["keywords"].join(", "))
         : "";
     },
     imageSrc() {
@@ -62,6 +65,9 @@ export default {
     title() {
       return `Clip ${this.clip["Clip Nr."]}`;
     },
+    highlightedTitle() {
+      return this.highlight(this.title);
+    }
   },
   methods: {
     highlight(content) {
