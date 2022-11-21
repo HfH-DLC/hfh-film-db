@@ -44,7 +44,7 @@ export default {
     },
     keywords() {
       return this.clip["keywords"]
-        ? this.highlight(this.clip["keywords"].join(", "))
+        ? this.highlight(this.clip["keywords"]).join(", ")
         : "";
     },
     imageSrc() {
