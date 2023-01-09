@@ -46,10 +46,11 @@
           </NuxtLink>
         </li>
       </ul>
-      <Pagination
+      <HfhPagination
         class="mt-16"
-        :currentPage="currentPage"
-        :lastPage="totalPages"
+        :currentPageNumber="currentPage"
+        :totalPageCount="totalPages"
+        type="Button"
         @pageSelected="setPage"
       />
     </div>
@@ -66,6 +67,7 @@ import {
   HfhFilterGroup,
   HfhSelect,
   HfhMultiRange,
+  HfhPagination,
 } from "@hfh-dlc/hfh-styleguide";
 
 import {
@@ -74,7 +76,6 @@ import {
   FILTER_TYPE_SELECT,
 } from "../consts";
 import { secondsToString } from "../helpers";
-import Pagination from "../components/Pagination.vue";
 
 const route = useRoute();
 const router = useRouter();
