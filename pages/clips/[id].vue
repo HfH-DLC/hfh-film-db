@@ -22,7 +22,7 @@
         <div class="max-w-content mx-auto">
           <h2 class="mt-6 lg:mt-8">Informationen zum Clip</h2>
           <DetailSection label="Behinderung">
-            {{ clip[FIELDNAMES.Behinderung] }}
+            {{ clip[FIELDNAMES.BEHINDERUNG] }}
           </DetailSection>
           <DetailSection label="Thema">
             {{ clip[FIELDNAMES.THEMA] }}
