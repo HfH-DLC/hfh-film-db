@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col">
+    <NuxtLink href="/" class="hfh-link hfh-link--default mb-8">Zurück</NuxtLink>
     <div v-if="clip">
       <h1 class="max-w-content mx-auto mb-6 lg:mb-10">
         Clip {{ clip[FIELDNAMES.CLIP] }}
@@ -77,8 +78,8 @@
 </template>
 
 <script setup>
+import { HfhLink } from "@hfh-dlc/hfh-styleguide";
 import { secondsToString } from "../../helpers";
-
 import { FIELDNAMES } from "../../consts";
 
 const { fetchClip, clips } = useClips();
