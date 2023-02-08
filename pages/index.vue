@@ -47,6 +47,7 @@
         </li>
       </ul>
       <HfhPagination
+        v-if="currentPage && totalPages"
         class="mt-16"
         :currentPageNumber="currentPage"
         :totalPageCount="totalPages"
