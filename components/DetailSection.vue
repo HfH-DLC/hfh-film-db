@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import { HfhLabel } from "@hfh-dlc/hfh-styleguide";
 const props = defineProps({
   label: {
     type: String,

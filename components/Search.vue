@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
 import { HfhButton, HfhInput } from "@hfh-dlc/hfh-styleguide";
 const emit = defineEmits(["search"]);
 const props = defineProps({

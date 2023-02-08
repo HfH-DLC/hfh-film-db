@@ -8,7 +8,6 @@
 </template>
 
 <script setup>
-import { HfhLabel } from "@hfh-dlc/hfh-styleguide";
 defineProps({
   label: {
     type: String,
