@@ -1,4 +1,4 @@
-import helpers from "@/server/utils/airtable.js";
+import helpers from "~~/server/utils/airtable.js";
 
 export default defineEventHandler(async (event) => {
   const filters = await helpers.getFiltersWithOptions();

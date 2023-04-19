@@ -10,13 +10,13 @@
           class="max-w-container mx-auto w-full mb-4 aspect-video bg-black"
           v-if="clip[FIELDNAMES.VIDEO]"
           title="vimeo-player"
-          :src="`https://player.vimeo.com/video/${videoUrlFragment1}?h=${videoUrlFragment2}`"
+          :src="videoUrl"
           frameborder="0"
           allowfullscreen
         ></iframe>
         <img
-          v-else-if="image"
-          :src="image"
+          v-else-if="imageUrl"
+          :src="imageUrl"
           alt=""
           class="max-w-container mx-auto w-full mb-4"
         />
@@ -78,26 +78,27 @@
 </template>
 
 <script setup>
-import { HfhLink } from "@hfh-dlc/hfh-styleguide";
 import { secondsToString } from "../../helpers";
 import { FIELDNAMES } from "../../consts";
 
 const { fetchClip, clips } = useClips();
 const route = useRoute();
 
+useAsyncData(async () => {
+  await fetchClip(route.params.id);
+});
+
 const clip = computed(() =>
   clips.value.find((clip) => clip.id == route.params.id)
 );
 
-const videoUrlFragment1 = computed(() => {
-  return clip.value[FIELDNAMES.VIDEO].split("/")[3];
+const videoUrl = computed(() => {
+  const path = clip.value[FIELDNAMES.VIDEO].split("/")[3];
+  const query = clip.value[FIELDNAMES.VIDEO].split("/")[4];
+  return `https://player.vimeo.com/video/${path}?h=${query}`;
 });
 
-const videoUrlFragment2 = computed(() => {
-  return clip.value[FIELDNAMES.VIDEO].split("/")[4];
-});
-
-const image = computed(() => {
+const imageUrl = computed(() => {
   return clip && clip.value[FIELDNAMES.BILD]
     ? clip.value[FIELDNAMES.BILD][0].thumbnails.large.url
     : null;
@@ -115,11 +116,6 @@ const joinArray = (array) => {
   }
   return "";
 };
-
-useAsyncData(async () => {
-  await fetchClip(route.params.id);
-});
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

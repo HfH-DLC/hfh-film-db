@@ -67,7 +67,6 @@ import {
   HfhHeaderBar,
   HfhMenu,
   HfhLogo,
-  HfhLink,
   HfhSocialBlock,
 } from "@hfh-dlc/hfh-styleguide";
 const menuItems = [
@@ -75,5 +74,4 @@ const menuItems = [
 ];
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -1,4 +1,4 @@
-import helpers from "@/server/utils/airtable";
+import helpers from "~~/server/utils/airtable";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params.id;

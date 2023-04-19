@@ -79,7 +79,6 @@ import {
 import { secondsToString } from "../helpers";
 
 const route = useRoute();
-const router = useRouter();
 const {
   clips,
   filters,
@@ -145,5 +144,4 @@ useAsyncData(async () => {
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
