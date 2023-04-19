@@ -1,42 +1,19 @@
-# Nuxt 3 Minimal Starter
+# HfH Filmclip DB aka Handyclip
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+## Technologies used
+
+This is a [Nuxt 3](https://nuxt.com/) application which connects to [Airtable](airtable.com) via its API and uses [tailwind](https://tailwindcss.com/) for styling.
 
 ## Setup
 
-Make sure to install the dependencies:
+- Create an `.npmrc` file in order to access the `hfh-dlc/hfh-styleguide` dependency.
+- Install dependencies with `npm i`.
+- Create an `.env` file with the following variables:
+  - NUXT_AIRTABLE_API_KEY (string): The airtable API key
+  - NUXT_AIRTABLE_BASE (string): The airtable base id
+  - NUXT_ENABLE_VIDEO (boolean): If true, videos are being displayed. Otherwise only preview thumbnails are shown.
 
-```bash
-# yarn
-yarn install
+## Usage
 
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/guide/deploy/presets) for more information.
+- For development, run the development server with `npm run dev`.
+- Run `npm run build` in order to create a production build.
