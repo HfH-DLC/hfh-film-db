@@ -1,7 +1,13 @@
 <template>
-  <HfhTeaser :imageSrc="imageSrc" imageAlt="" :title="title" >
+  <HfhTeaser
+    :imageSrc="imageSrc"
+    imageAlt=""
+    :title="title"
+    :link="`/clips/${clip.id}`"
+    :linkComponent="linkComponent"
+  >
     <template v-slot:title>
-     <span v-html="highlightedTitle"></span>
+      <span v-html="highlightedTitle"></span>
     </template>
     <div class="gap-4 grid">
       <CardSection label="Behinderung" :content="behinderung" />
@@ -14,7 +20,9 @@
 </template>
 
 <script>
+import { markRaw } from "vue";
 import { HfhTeaser } from "@hfh-dlc/hfh-styleguide";
+import { NuxtLink } from "#components";
 export default {
   components: {
     HfhTeaser,
@@ -28,6 +36,11 @@ export default {
       type: String,
       default: "",
     },
+  },
+  data() {
+    return {
+      linkComponent: markRaw(NuxtLink),
+    };
   },
   computed: {
     searchWords() {
@@ -67,14 +80,16 @@ export default {
     },
     highlightedTitle() {
       return this.highlight(this.title);
-    }
+    },
   },
   methods: {
     highlight(content) {
       if (content && this.searchWords.length > 0) {
         this.searchWords.forEach((word) => {
           content = content.replace(new RegExp(word, "gi"), (match) => {
-            return '<span class="bg-yellow-400 text-black">' + match + "</span>";
+            return (
+              '<span class="bg-yellow-400 text-black">' + match + "</span>"
+            );
           });
         });
       }
@@ -84,5 +99,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

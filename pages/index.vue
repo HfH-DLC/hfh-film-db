@@ -1,30 +1,38 @@
 <template>
   <div class="flex flex-col mx-auto w-full">
     <Search @search="onSearchTextChange" :searchText="searchText" />
-    <HfhFilterGroup class="mt-4 mb-8" @reset="onFiltersReset">
-      <template v-for="filter in filters" :key="filter.id">
-        <HfhSelect
-          v-if="filter.type === FILTER_TYPE_SELECT"
-          :modelValue="filter.value"
-          :id="filter.id"
-          :label="filter.label"
-          :options="filter.options"
-          defaultOption="Bitte wählen..."
-          @update:modelValue="onFilterChange($event, filter)"
-        />
-        <div v-if="filter.type === FILTER_TYPE_RANGE">
-          <HfhMultiRange
-            :min="filter.min"
-            :max="filter.max"
-            :step="filter.step"
-            :modelValue="filter.value"
-            :id="filter.id"
-            :label="filter.label"
-            :startLabel="filter.startLabel"
-            :endLabel="filter.endLabel"
-            @update:modelValue="onFilterChange($event, filter)"
-            :formattingCallback="getFilterFormat(filter.format)"
-          ></HfhMultiRange>
+    <HfhFilterGroup
+      class="mt-4 mb-8"
+      @reset="onFiltersReset"
+      orientation="horizontal"
+    >
+      <template v-for="(column, index) in filterColumns" :key="index">
+        <div>
+          <template v-for="filter in column" :key="filter.id">
+            <HfhSelect
+              v-if="filter.type === FILTER_TYPE_SELECT"
+              :modelValue="filter.value"
+              :id="filter.id"
+              :label="filter.label"
+              :options="filter.options"
+              defaultOption="Bitte wählen..."
+              @update:modelValue="onFilterChange($event, filter)"
+            />
+            <div v-if="filter.type === FILTER_TYPE_RANGE">
+              <HfhMultiRange
+                :min="filter.min"
+                :max="filter.max"
+                :step="filter.step"
+                :modelValue="filter.value"
+                :id="filter.id"
+                :label="filter.label"
+                :startLabel="filter.startLabel"
+                :endLabel="filter.endLabel"
+                @update:modelValue="onFilterChange($event, filter)"
+                :formattingCallback="getFilterFormat(filter.format)"
+              ></HfhMultiRange>
+            </div>
+          </template>
         </div>
       </template>
     </HfhFilterGroup>
@@ -37,13 +45,8 @@
         >
       </h2>
       <ul class="grid grid-cols-index-xs sm:grid-cols-index gap-4">
-        <li v-for="clip in clips" :key="clip.ClipNummer" class="h-full">
-          <NuxtLink
-            :to="`/clips/${clip.id}`"
-            class="focus-visible:outline-none group"
-          >
-            <Card :clip="clip" :searchText="searchText" class="h-full" />
-          </NuxtLink>
+        <li v-for="clip in clips" :key="clip.ClipNummer" class="h-ful">
+          <Card :clip="clip" :searchText="searchText" class="h-full" />
         </li>
       </ul>
       <HfhPagination
@@ -51,7 +54,7 @@
         class="mt-16"
         :currentPageNumber="currentPage"
         :totalPageCount="totalPages"
-        type="Button"
+        :type="1"
         @pageSelected="setPage"
       />
     </div>
@@ -61,7 +64,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import debounce from "lodash.debounce";
 import { ref } from "vue";
 import {
@@ -92,6 +95,19 @@ const {
   totalPages,
   totalRecords,
 } = useClips();
+
+useAsyncData(async () => {
+  await fetchFilters();
+  await fetchClips();
+});
+
+const filterColumns = computed(() => {
+  const result = [];
+  for (let i = 0; i < filters.value.length; i += 2) {
+    result.push(filters.value.slice(i, i + 2));
+  }
+  return result;
+});
 
 const getFilterFormat = (format) => {
   if (format === FILTER_FORMAT_TIME) {
@@ -137,11 +153,6 @@ const setPage = (page) => {
   fetchClips();
   scrollTo(results.value.offsetLeft, results.value.offsetTop);
 };
-
-useAsyncData(async () => {
-  await fetchFilters();
-  await fetchClips();
-});
 </script>
 
 <style lang="scss" scoped></style>
