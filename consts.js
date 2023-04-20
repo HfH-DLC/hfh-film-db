@@ -33,18 +33,18 @@ export const FIELDS = {
   RELEVANZ: { name: FIELDNAMES.RELEVANZ },
   HERKUNFT: {
     name: FIELDNAMES.HERKUNFT,
-    fallbackName: FIELDNAMES.FILM_HERKUNFT,
+    fallbackFieldName: FIELDNAMES.FILM_HERKUNFT,
   },
   FILM: { name: FIELDNAMES.FILM },
   GESCHLECHT: {
     name: FIELDNAMES.GESCHLECHT,
-    fallbackName: FIELDNAMES.FILM_GESCHLECHT,
+    fallbackFieldName: FIELDNAMES.FILM_GESCHLECHT,
   },
   BILD: { name: FIELDNAMES.BILD },
   LAENGE: { name: FIELDNAMES.LAENGE },
   ALTERSGRUPPE: {
     name: FIELDNAMES.ALTERSGRUPPE,
-    fallbackName: FIELDNAMES.FILM_ALTERSGRUPPE,
+    fallbackFieldName: FIELDNAMES.FILM_ALTERSGRUPPE,
   },
   CLIP: { name: FIELDNAMES.CLIP },
   KEYWORDS: { name: FIELDNAMES.KEYWORDS },
@@ -82,7 +82,6 @@ export const FILTERS = [
     type: FILTER_TYPE_SELECT,
     params: { value: "altersgruppe" },
     label: "Altersgruppe",
-    local: true,
   },
   {
     id: "land",
@@ -113,3 +112,17 @@ export const FILTERS = [
     format: FILTER_FORMAT_TIME,
   },
 ];
+
+/**
+ * The fields to be included in text search
+ */
+export const SEARCH_TEXT_FIELDS = [
+  FIELDS.CLIP,
+  FIELDS.BEHINDERUNG,
+  FIELDS.THEMA,
+  FIELDS.RELEVANZ,
+  FIELDS.KEYWORDS,
+  FIELDS.FILM_TITEL,
+];
+
+export const TABLE_NAME = "Clips";

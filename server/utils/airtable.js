@@ -1,27 +1,19 @@
 import { isArray } from "@vue/shared";
 import Airtable from "airtable";
+import NodeCache from "node-cache";
+import { FIELDNAMES, FIELDS, TABLE_NAME } from "../../consts";
+
 const config = useRuntimeConfig();
 
 const airtableBase = new Airtable({
   apiKey: config.airtableApiKey,
 }).base(config.airtableBase);
 
-import {
-  FILTER_TYPE_RANGE,
-  FILTER_TYPE_SELECT,
-  FIELDNAMES,
-  FILTERS,
-  FIELDS,
-} from "../../consts";
+const cache = new NodeCache({ stdTTL: 86400 });
 
-const searchTextFields = [
-  FIELDS.CLIP,
-  FIELDS.BEHINDERUNG,
-  FIELDS.THEMA,
-  FIELDS.RELEVANZ,
-  FIELDS.KEYWORDS,
-  FIELDS.FILM_TITEL,
-];
+/**
+ * The fields that may be returned to the client
+ */
 let allowedFieldNames = [
   FIELDNAMES.BEHINDERUNG,
   FIELDNAMES.THEMA,
@@ -49,76 +41,63 @@ if (config.enableVideo === true) {
   allowedFieldNames.push(FIELDNAMES.VIDEO);
 }
 
-const getSearchTextFormula = (text) => {
-  const words = text.trim().split(" ");
-  const queries = words.filter(word => word.toLowerCase() != 'clip').map((word) => {
-    const conditions = searchTextFields.map((field) => {
-      if (field.lookup) {
-        return ` FIND('${word.toLowerCase()}', LOWER(ARRAYJOIN({${
-          field.name
-        }} & ""), ' '))`;
-      }
-      return ` FIND('${word.toLowerCase()}', LOWER({${field.name}} & ""))`;
+/**
+ * Retrieves all records from airtable sorted by Clip Nr.
+ * The records are cached.
+ */
+const getAllRecords = async () => {
+  if (!cache.has("all-records")) {
+    const options = {
+      fields: allowedFieldNames,
+      sort: [{ field: FIELDNAMES.CLIP, direction: "asc" }],
+      filterByFormula: `NOT({${FIELDNAMES.CLIP}} = '')`,
+    };
+    const records = await airtableBase(TABLE_NAME).select(options).all();
+    const transformedRecords = records.map((record) => {
+      return transformRecord(record);
     });
-  
-    return `OR(${conditions.join(", ")})`;
-  });
-
-  const formula = `AND(${queries.join(", ")})`;
-  return formula;
-};
-
-const getFilterFormula = (filter, query) => {
-  if (filter.type === FILTER_TYPE_SELECT) {
-    const value = query[filter.params.value];
-    if (value) {
-      return `FIND('${value.toLowerCase()}', LOWER({${filter.field.name}}))`;
-    }
+    cache.set("all-records", transformedRecords);
   }
-  if (filter.type === FILTER_TYPE_RANGE) {
-    const start = query[filter.params.start];
-    const end = query[filter.params.end];
-    if (!(start && end)) {
-      return "";
-    }
-    return `AND({${filter.field.name}}>=${start},{${filter.field.name}}<=${end})`;
-  }
+  return cache.get("all-records");
 };
 
-const getRecords = async (table, options) => {
-  const records = await airtableBase(table).select(options).all();
-  return records.map((record) => {
-    return transformRecord(record);
-  });
-};
-
-const getSingleRecord = async (table, id) => {
-  const record = await airtableBase(table).find(id);
+/**
+ * Retrives a single record from airtable
+ */
+const getSingleRecord = async (id) => {
+  const record = await airtableBase(TABLE_NAME).find(id);
   return transformRecord(record);
 };
 
 const transformRecord = (record) => {
-  applyFallbacks(record);
+  filterFields(record);
+  applyFallbackValues(record);
+  unwrapArrayValues(record);
+  return { id: record.id, ...record.fields };
+};
+
+/**
+ * Removes fields that are not allowed to be sent to the client
+ */
+const filterFields = (record) => {
   for (const [key, value] of Object.entries(record.fields)) {
     if (!allowedFieldNames.includes(key)) {
       delete record.fields[key];
       continue;
     }
-    const field = Object.values(FIELDS).find((value) => value.name == key);
-    if (!field) {
-      continue;
-    }
-    if (field.unwrapArray) {
-      record.fields[key] = value[0];
-    }
   }
-  return { id: record.id, ...record.fields };
 };
 
-const applyFallbacks = (record) => {
-  const fields = Object.values(FIELDS).filter((field) => field.fallbackName);
+/**
+ * Some fields have another field to fall back on if they are empty, defined by a "fallbackFieldName" property.
+ * This applies those fallback values for all those fields.
+ */
+const applyFallbackValues = (record) => {
+  const fields = Object.values(FIELDS).filter(
+    (field) => field.fallbackFieldName
+  );
   fields.forEach((field) => {
-    const fallbackValue = record.fields[field.fallbackName];
+    const fallbackValue = record.fields[field.fallbackFieldName];
     if (fallbackValue) {
       const value = record.fields[field.name];
       let useFallback = false;
@@ -134,65 +113,22 @@ const applyFallbacks = (record) => {
   });
 };
 
-const getFiltersWithOptions = async () => {
-  const fields = FILTERS.map((filter) => filter.field.name);
-  const records = await airtableBase("Clips")
-    .select({
-      fields,
-    })
-    .all();
-  return FILTERS.reduce((acc, filter) => {
-    const options = [];
-    records.forEach((record) => {
-      let value = record.fields[filter.field.name];
-      if (value == undefined) {
-        if (!filter.field.fallback) {
-          return;
-        }
-        value = record.fields[filter.field.fallback];
-        if (value == undefined) {
-          return;
-        }
-      }
-      if (isArray(value)) {
-        options.push(...value);
-      } else {
-        options.push(value);
-      }
-    });
-    const set = new Set(options);
-    if (filter.type === FILTER_TYPE_SELECT) {
-      acc.push({
-        ...filter,
-        options: [...set]
-          .sort()
-          .map((option) => ({ label: option, value: option })),
-        value: "",
-        defaultValue: "",
-      });
+/**
+ * Unwraps array values for fields with the "unwrapArray" property options set to true.
+ */
+const unwrapArrayValues = (record) => {
+  for (const [key, value] of Object.entries(record.fields)) {
+    const field = Object.values(FIELDS).find((value) => value.name == key);
+    if (!field) {
+      continue;
     }
-    if (filter.type === FILTER_TYPE_RANGE) {
-      const values = [...set].sort((a, b) => a - b);
-      if (values.length > 0) {
-        const min = Math.floor(values[0] / filter.step) * filter.step;
-        const max =
-          Math.ceil(values[values.length - 1] / filter.step) * filter.step;
-        const filterData = {
-          ...filter,
-          min,
-          max,
-        };
-        acc.push(filterData);
-      }
+    if (field.unwrapArray) {
+      record.fields[key] = value[0];
     }
-    return acc;
-  }, []);
+  }
 };
 
 export default {
-  getSearchTextFormula,
-  getFilterFormula,
-  getRecords,
+  getAllRecords,
   getSingleRecord,
-  getFiltersWithOptions,
 };
