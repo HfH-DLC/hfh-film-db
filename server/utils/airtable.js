@@ -9,7 +9,7 @@ const airtableBase = new Airtable({
   apiKey: config.airtableApiKey,
 }).base(config.airtableBase);
 
-const cache = new NodeCache({ stdTTL: 86400 });
+const cache = new NodeCache({ stdTTL: 3600 });
 
 /**
  * The fields that may be returned to the client
