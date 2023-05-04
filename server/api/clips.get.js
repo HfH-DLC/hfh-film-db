@@ -54,7 +54,7 @@ function applyQuery(records, query) {
     }
   });
   if (query.searchText) {
-    applySearchTextQuery(records, query);
+    records = applySearchTextQuery(records, query);
   }
   return records;
 }
@@ -94,11 +94,26 @@ function applyRangeFilter(records, query, filter) {
 
 function applySearchTextQuery(records, query) {
   return records.filter((record) => {
-    SEARCH_TEXT_FIELDS.forEach((field) => {
-      if (record[field].includes(query.searchText)) {
+    for (let field of SEARCH_TEXT_FIELDS) {
+      let value = record[field.name];
+      if (typeof value === "number") {
+        value = value.toString();
+      }
+      if (isArray(value)) {
+        if (
+          value
+            .map((element) => element.toLowerCase())
+            .includes(query.searchText.toLowerCase())
+        ) {
+          return true;
+        }
+      } else if (
+        value &&
+        value.toLowerCase().includes(query.searchText.toLowerCase())
+      ) {
         return true;
       }
-    });
+    }
     return false;
   });
 }
