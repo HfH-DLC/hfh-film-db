@@ -34,6 +34,9 @@
           <DetailSection label="Inhalt">
             {{ clip[FIELDNAMES.INHALT] }}
           </DetailSection>
+          <DetailSection label="Startzeit">
+            {{ startingTime }}
+          </DetailSection>
           <DetailSection label="Länge">
             {{ clipLength }}
           </DetailSection>
@@ -102,6 +105,12 @@ const imageUrl = computed(() => {
   return clip && clip.value[FIELDNAMES.BILD]
     ? clip.value[FIELDNAMES.BILD][0].thumbnails.large.url
     : null;
+});
+
+const startingTime = computed(() => {
+  return clip && clip.value[FIELDNAMES.STARTZEIT]
+    ? secondsToString(clip.value[FIELDNAMES.STARTZEIT])
+    : "";
 });
 
 const clipLength = computed(() => {

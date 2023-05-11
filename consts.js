@@ -25,6 +25,7 @@ export const FIELDNAMES = {
   FILM_ALTERSGRUPPE: "Film_Altersgruppe_behinderte_Person",
   FILM_GESCHLECHT: "Film_Geschlecht_behinderte_Person",
   VIDEO: "Vimeo-Link",
+  STARTZEIT: "Startzeit",
 };
 
 export const FIELDS = {
@@ -59,6 +60,7 @@ export const FIELDS = {
   },
   FILM_TON: { name: FIELDNAMES.FILM_TON },
   VIDEO: { name: FIELDNAMES.VIDEO },
+  STARTZEIT: { name: FIELDNAMES.STARTZEIT },
 };
 
 export const FILTERS = [

@@ -36,6 +36,7 @@ let allowedFieldNames = [
   FIELDNAMES.ALTERSGRUPPE,
   FIELDNAMES.HERKUNFT,
   FIELDNAMES.GESCHLECHT,
+  FIELDNAMES.STARTZEIT,
 ];
 if (config.enableVideo === true) {
   allowedFieldNames.push(FIELDNAMES.VIDEO);
