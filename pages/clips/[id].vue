@@ -21,7 +21,7 @@
           class="max-w-container mx-auto w-full mb-4"
         />
         <div class="max-w-content mx-auto">
-          <h2 class="mt-6 lg:mt-8">Informationen zum Clip</h2>
+          <h2 class="mt-6 lg:mt-8 hfh-h2">Informationen zum Clip</h2>
           <DetailSection label="Behinderung">
             {{ clip[FIELDNAMES.BEHINDERUNG] }}
           </DetailSection>
@@ -43,7 +43,7 @@
           <DetailSection label="Schlüsselwörter">
             {{ joinArray(clip[FIELDNAMES.KEYWORDS]) }}
           </DetailSection>
-          <h2 class="mt-6 lg:mt-8">
+          <h2 class="mt-6 lg:mt-8 hfh-h2">
             Informationen zu den Personen mit Behinderung
           </h2>
           <DetailSection label="Herkunft">
@@ -55,7 +55,7 @@
           <DetailSection label="Geschlecht">
             {{ joinArray(clip[FIELDNAMES.GESCHLECHT]) }}
           </DetailSection>
-          <h2 class="mt-6 lg:mt-8">Informationen zum Film</h2>
+          <h2 class="mt-6 lg:mt-8 hfh-h2">Informationen zum Film</h2>
           <DetailSection label="Titel">
             {{ clip[FIELDNAMES.FILM_TITEL] }}
           </DetailSection>
