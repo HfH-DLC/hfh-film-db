@@ -11,7 +11,7 @@ import {
  * Get all clips from airtable filtered by search text and filters
  */
 export default defineEventHandler(async (event) => {
-  const query = useQuery(event);
+  const query = getQuery(event);
   const records = await getFilteredRecords(query);
   const currentPageRecords = getCurrentPageRecords(records, query);
   const totalPages = Math.ceil(records.length / query.pageSize);

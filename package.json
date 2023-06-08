@@ -6,8 +6,7 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^5.3.3",
-    "nuxt": "3.0.0-rc.9",
+    "@nuxtjs/tailwindcss": "^6.7.0",
     "sass": "^1.54.9"
   },
   "dependencies": {
@@ -15,6 +14,7 @@
     "airtable": "^0.11.4",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "nuxt": "^3.5.3"
   }
 }
